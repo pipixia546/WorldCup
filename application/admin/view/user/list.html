@@ -1,0 +1,148 @@
+
+<div class="row">
+    <!-- Start .row -->
+    <div class="col-lg-12">
+        <!-- col-lg-12 start here -->
+        <div class="panel panel-default plain toggle panelClose panelRefresh" id="spr_3" >
+            <!-- Start .panel -->
+            <div class="panel-heading white-bg">
+                <h4 class="panel-title">用户竞猜</h4>
+                <div style=" margin-top: 50px;">
+                    <div class="input-group" style="width: 100%;">
+                        <div class="cc" >
+                            <span>按用户搜索：</span><span style="margin-left: 37%;">按比赛类型搜索：</span>
+                        </div>
+                        <form action="{:url('/user/guess')}" method="post">
+                            <input type="hidden" name="type" value="1"/>
+                            <input type="text" class="form-control" name="user" style="width: 20%;" value="{$search.user}">
+                            <span style="display: block;float: left">
+                             <input class="btn btn-primary" type="submit" value="搜索"/>
+                        </span>
+                        </form>
+                        <form action="{:url('/user/guess')}" method="post">
+                            <input type="hidden" name="type" value="2"/>
+                            <select class="form-control" name="game_type" style="width: 20%;margin-left: 20%;" id="game_type">
+                                <optgroup>
+                                    <option value="">——请选择——</option>
+                                    <option value="A">小组赛A组</option>
+                                    <option value="B">小组赛B组</option>
+                                    <option value="C">小组赛C组</option>
+                                    <option value="D">小组赛D组</option>
+                                    <option value="E">小组赛E组</option>
+                                    <option value="H">小组赛F组</option>
+                                    <option value="G">小组赛G组</option>
+                                    <option value="H">小组赛H组</option>
+                                    <option value="16">1/8赛</option>
+                                    <option value="8">1/4赛</option>
+                                    <option value="4">半决赛</option>
+                                    <option value="3">三四名决赛</option>
+                                    <option value="2">决赛</option>
+                                </optgroup>
+                            </select>
+                            <span>
+                            <input class="btn btn-primary" type="submit" value="搜索"/>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: auto;"><div class="table-responsive" style="overflow: hidden; width: 100%; height: auto;">
+                    <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>用户</th>
+                        <th>比赛</th>
+                        <th>比赛类型</th>
+                        <th>比赛时间</th>
+                        <!--<th>比赛分数</th>-->
+                        <!--<th>比赛结果</th>-->
+                        <th>用户竞猜</th>
+                        <th>是否中奖</th>
+                        <th>竞猜时间</th>
+                        <th>派彩人</th>
+                        <th>派彩时间</th>
+                        <th>操作</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name="list" item="do" key="k"}
+                    <tr>
+                        <td>
+                            {$do.user}
+                        </td>
+                        <td>{:getName($do.team_A)}vs{:getName($do.team_B)}</td>
+                        <td>{:getForecastType($do.game_type)}</td>
+                        <td>{$do.game_time|date="m-d H:i",###}</td>
+
+                        <td>{if condition="$do.result_game== 1 "}{:getTeam($do.team_A)}胜{elseif condition="$do.result_game == 0"}平{else /}{:getTeam($do.team_B)}胜 {/if}</td>
+                        <td>{if condition="$do.result_game== $do.game_result "}是{elseif condition="$do.game_result==2"}比分未添加{else/}否{/if}</td>
+                        <td>{$do.guess_time|date="m-d H:i",###}</td>
+                        <td>{$do.deal_user}</td>
+                        <td>{if condition="$do.deal_time==''"}{else/}{$do.deal_time|date="m-d H:i",###}{/if}</td>
+                        <td>{if condition="$do.result_game== $do.game_result && $do.status != 1 "}<button type="button" class="btn btn-info btn_submit" rel="{$do.id}">派奖</button>{elseif condition="$do.result_game!= $do.game_result"}--{else/}已派奖{/if}</td>
+                            <!--<button type="button" class="btn btn-info del" rel="{$do.id}">删除</button>-->
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table></div><div class="slimScrollBar ui-draggable" style="background: rgb(153, 153, 153); height: 5px; position: absolute; bottom: 3px; opacity: 0.4; display: none; border-radius: 5px; z-index: 99; width: 1057px; left: 0px;"></div><div class="slimScrollRail" style="width: 100%; height: 5px; position: absolute; bottom: 3px; display: none; border-radius: 5px; background: rgb(51, 51, 51); opacity: 0.5; z-index: 90;"></div></div>
+                {$list->render()}
+            </div>
+
+        </div>
+        <!-- End .panel -->
+    </div>
+
+    <!-- col-lg-12 end here -->
+</div>
+
+<script>
+    $(function () {
+        // $('.btn_submit').click(function () {
+        //     var id=$(this).attr('rel');
+        //     var url="/game/edit/id/"+id;
+        //     layer.open({
+        //         type: 2,
+        //         title:'添加比赛结果：',
+        //         skin: 'layui-layer-rim', //加上边框
+        //         area: ['520px', '300px'], //宽高
+        //         content:url,
+        //     });
+        // });/
+        $('#game_type').val('{$search.game_type}');
+        $('.btn_submit').click(function () {
+            var id=$(this).attr('rel');
+            var url="{:url('/user/deal')}";
+            layer.confirm('确定派彩？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.post(url,{id:id},function (data) {
+                    if(data.code==0){
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 1
+                        })
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000)
+
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 2
+                        })
+                    }
+                },'json')
+            })
+        });
+
+    })
+
+</script>

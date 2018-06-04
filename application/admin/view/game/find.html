@@ -1,0 +1,155 @@
+
+<html>
+<head>
+    <script src="__ADMIN__/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="__ADMIN__/layer/layer.js"></script>
+    <style type="text/css">
+        body,table{
+            font-size:12px;
+        }
+        table{
+            table-layout:fixed;
+            empty-cells:show;
+            border-collapse: collapse;
+            margin:0 auto;
+        }
+        td{
+            height:30px;
+        }
+        h1,h2,h3{
+            font-size:12px;
+            margin:0;
+            padding:0;
+        }
+        .table{
+            border:1px solid #cad9ea;
+            color:#666;
+        }
+        .table th {
+            background-repeat:repeat-x;
+            height:30px;
+        }
+        .table td,.table th{
+            border:1px solid #cad9ea;
+            padding:0 1em 0;
+        }
+        .table tr.alter{
+            background-color:#f5fafe;
+        }
+        .pagination{text-align:center;margin-top:20px;margin-bottom: 20px;}
+        .pagination li{margin:0px 10px; border:1px solid #e6e6e6;padding: 3px 8px;display: inline-block;}
+        .pagination .active{background-color: #dd1a20;color: #fff;}
+        .pagination .disabled{color:#aaa;}
+        #login_click{ margin-top:2px; height:20px;}
+        #login_click a
+        {
+
+
+            text-decoration:none;
+            background:green;
+            color:#f2f2f2;
+
+            padding: 0px 30px 0px 30px;
+            font-size:14px;
+            font-family: 微软雅黑,宋体,Arial,Helvetica,Verdana,sans-serif;
+            font-weight:bold;
+            border-radius:3px;
+
+            -webkit-transition:all linear 0.30s;
+            -moz-transition:all linear 0.30s;
+            transition:all linear 0.30s;
+
+        }
+        #login_click a:hover { background:#385f9e; }
+    </style>
+</head>
+<body>
+<div style="width: 100% ;text-align: center">
+    <button class="btn_cc" style="width:80px;height: 35px;background: red;color:white;" rel="{$id}">
+        一键派彩
+    </button>
+</div>
+
+<table width="90%" class="table">
+    <tr>
+        <th>用户名</th>
+        <th>操作</th>
+    </tr>
+    {foreach $list as $do}
+    <tr>
+        <td style="text-align: center">{$do.user}</td>
+        <td style="text-align: center">{if condition="$do.status==0"}
+            <div id="login_click" rel="{$do.id}" >
+            <a id="btlogin" href="#">派奖</a>{else /}已派奖{/if}
+        </div> </td>
+    </tr>
+    {/foreach}
+
+</table>
+<script>
+    $(function () {
+        $('.btn_cc').click(function () {
+            var id=$(this).attr('rel');
+            var url="{:url('/game/find')}";
+            var type=2;
+            layer.confirm('确定派彩？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.post(url,{id:id},function (data) {
+                    if(data.code==0){
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 1
+                        })
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000)
+
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 2
+                        })
+                    }
+                },'json')
+            });
+        })
+        $('#login_click').click(function () {
+
+            var id=$(this).attr('rel');
+            var url="{:url('/user/deal')}";
+            layer.confirm('确定派彩？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.post(url,{id:id},function (data) {
+                    if(data.code==0){
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 1
+                        })
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000)
+
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan'
+                            , closeBtn: 0,
+                            title: '提示'
+                            , icon: 2
+                        })
+                    }
+                },'json')
+            })
+        });
+
+    })
+</script>
+</body>
+</html> 

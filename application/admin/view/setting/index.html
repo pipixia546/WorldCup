@@ -1,0 +1,161 @@
+<form>
+<div class="col-lg-12">
+    <!-- Start col-lg-12 -->
+    <div class="panel panel-default toggle" id="spr_0">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">队伍排名时间管理</h3>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="toggle panel-minimize">
+                    <i class="im-minus"></i></a>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-4 col-md-4">
+                <div class="input-group">16强添加时间
+                    <input class="form-control datetime-picker" type="text" value="{$info.sixteen_date|date='Y-m-d H:i:s',###}" id="A" name="sixteen_date">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="input-group">8强添加时间
+                    <input class="form-control datetime-picker" type="text" value="{$info.eight_date|date='Y-m-d H:i:s',###}" id="B" name="eight_date">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="input-group">4强添加时间
+                    <input class="form-control datetime-picker" type="text" value="{$info.four_date|date='Y-m-d H:i:s',###}" id="C" name="four_date">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="input-group">决赛队伍添加时间
+                    <input class="form-control datetime-picker" type="text" value="{$info.two_date|date='Y-m-d H:i:s',###}" id="D" name="two_date">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+                <div class="input-group">冠军添加时间
+                    <input class="form-control datetime-picker" type="text" value="{$info.one_date|date='Y-m-d H:i:s',###}" id="E" name="one_date">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="col-lg-12">
+    <!-- Start col-lg-12 -->
+
+        <div class="panel-heading">
+            <h2 class="panel-title">预测时间管理</h2>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="toggle panel-minimize">
+                    <i class="im-minus"></i></a>
+            </div>
+        </div>
+            <div class="form-group">
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">16强预测开始时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_sixteen_start_time|date='Y-m-d H:i:s',###}" id="Q" name="fore_sixteen_start_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">16强预测结束时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_sixteen_end_time|date='Y-m-d H:i:s',###}" id="R" name="fore_sixteen_end_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">8强预测开始时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_eight_start_time|date='Y-m-d H:i:s',###}" id="S" name="fore_eight_start_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">8强预测结束时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_eight_end_time|date='Y-m-d H:i:s',###}" id="T" name="fore_eight_end_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">4强预测开始时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_four_start_time|date='Y-m-d H:i:s',###}" id="U" name="fore_four_start_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">4强预测结束时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_four_end_time|date='Y-m-d H:i:s',###}" id="V" name="fore_four_end_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">决赛预测开始时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_two_start_time|date='Y-m-d H:i:s',###}" id="W" name="fore_two_start_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">决赛预测开始时间结束时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_two_end_time|date='Y-m-d H:i:s',###}" id="X" name="fore_two_end_time">
+                    </div>
+
+                </div>
+               <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">冠军预测开始时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_one_start_time|date='Y-m-d H:i:s',###}" id="Y" name="fore_one_start_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-4 col-md-4" style="width: 50%">
+                    <span class="help-block">冠军预测开始时间结束时间</span>
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" type="text" value="{$info.fore_one_end_time|date='Y-m-d H:i:s',###}" id="Z" name="fore_one_end_time">
+                    </div>
+
+                </div>
+                <div class="col-lg-10 col-md-10" style="width: 50%">
+                    <button type="button" class="btn btn-purple">添加</button>
+                    <!-- End .form-group  -->
+                </div>
+            </div>
+</div>
+</form>
+<script>
+    var arr=new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+    var n=arr.length;
+     for (var i=0;i<n;i++) {
+         laydate.render({
+             elem: '#'+arr[i]
+             ,type: 'datetime'
+         });
+     }
+
+
+
+
+    $(function () {
+        $('.btn-purple').click(function () {
+            var formData=$(this).parents('form').serialize();
+            var url="{:url('/ad/setting')}";
+            $.post(url,formData,function (data) {
+                    if(data.code==0){
+                        layer.msg(data.msg);
+                        window.location.reload();
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan',closeBtn: 0
+                        });
+                    }
+                },'json')
+            });
+    })
+</script>

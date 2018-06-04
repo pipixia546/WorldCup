@@ -1,0 +1,49 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="__ADMIN__/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="__ADMIN__/layer/layer.js"></script>
+</head>
+<body>
+<input type="text" id="userName" placeholder="请输入未通过信息" style=" border: 1px solid #ccc;padding: 7px 0px;border-radius: 3px;padding-left:5px;margin:20px 10px;width: 265px;"/>
+<input type="button" value="提交" style="width: 100px;margin:10px 100px;background: #802022;color: white;" class="bb"/>
+<input type="hidden" value="{$id}" class="aa">
+</body>
+</html>
+<script>
+    $(function () {
+        $('.bb').click(function () {
+            var id=$('.aa').val();
+            var remark=$('#userName').val();
+            var url="{:url('/user/tan')}";
+            $.post(url,{id:id,remark:remark},function (data) {
+                if (data.code==0){
+
+                    layer.alert(data.msg, {
+                        skin: 'layui-layer-lan'
+                        ,closeBtn: 0,
+                        title:'提示'
+                        ,icon:1
+                    });
+                    setTimeout(function () {
+                        window.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    },1000)
+
+                } else{
+                    layer.alert(data.msg, {
+                        skin: 'layui-layer-lan'
+                        ,closeBtn: 0,
+                        title:'提示'
+                        ,icon:2
+
+                    });
+                }
+
+            });
+        });
+    })
+</script>

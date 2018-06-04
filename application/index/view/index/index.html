@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bet365_俄罗斯世界杯</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="__INDEX__/css/layer.css">
+    <link rel="stylesheet" href="__INDEX__/css/style.css">
+    <script type="text/javascript" src="__INDEX__/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__INDEX__/js/jquery.SuperSlide.2.1.1.js"></script>
+    <script type="text/javascript" src="__INDEX__/js/layer.js"></script>
+    <script type="text/javascript" src="__INDEX__/js/common.js"></script>
+  <style>
+    body{width:100%;height:100%}
+  </style>
+</head>
+<body>
+<div id="layerMember" class="j-autoshow"  style="display: none;" user="{$user}">
+    <form action="" class="bet-form">
+        <div class="form-title">会员账号</div>
+        <div class="form-row">
+            <div class="form-label">会员账号：</div>
+            <div class="form-con">
+                <input type="text" class="input-text" placeholder="请输入您的会员账号" id="input-text">
+            </div>
+        </div>
+        <div class="tc">
+            <input type="button" class="input-submit" value="提交">
+        </div>
+    </form>
+</div>
+<div class="page-index">
+  <div class="header">
+			<div class="container">
+				<ul class="nav">
+					<li class="nav-item"><a href="/">首页</a></li>
+					<li class="nav-item"><a href="https://www.bet3651.vip/?Intr=FPBlzc" target="_black">注册会员</a></li>
+					<li class="nav-item"><a href="javascript:;"><img src="__INDEX__/images/toplogo.png" alt="" ></a></li>
+					<li class="nav-item"><a href="https://messengers.providesupport.net/messenger/1tlvbqaib8vst180u0ck786nyi.html" target="_black">在线客服</a></li>
+					<li class="nav-item"><a href="https://www.bet3651.vip/jsp/member/space.jsp" target="_black">优惠活动</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="header-blank"></div>
+    <div class="banner">
+        <div class="container">
+            <div class="img-wrap">
+                <img src="__INDEX__/images/index_banner.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="index-main">
+        <div class="f f1">
+            <div class="container">
+                <a href="javascript:;" class="f-btn j-btn-my"><span>我的竞猜</span></a>
+                <!-- 弹窗-赛程竞猜 -->
+                <div class="hide" id="layerMyGuess1">
+                    <div class="scroll-wrap">
+                        <table class="flow-table">
+                            <tr class="green">
+                                <th style="padding-left: .2rem">赛事时间</th>
+                                <th align="center">球队名称</th>
+                                <th align="center"><span >vs</span></th>
+                                <th >球队名称</th>
+                                <th align="center">比分</th>
+                                <th align="center">我的竞猜</th>
+                                <th align="center">中奖状态</th>
+                                <th align="center">是否派彩</th>
+                                <th align="center">提交时间</th>
+                            </tr>
+                            {foreach $guess as $vo}
+                            <tr>
+                                <td style="padding-left: .2rem">{$vo.game_time|date="m-d H:i",###}</td>
+                                <td align="center"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/></div></td>
+                                <th align="center"><span style="margin: 0 .2rem">vs</span></th>
+                                <th><div class="flow-vs-wrap"><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></th>
+                                <td align="center">{if condition="$time > $vo['game_time']"}{$vo.score_A} : {$vo.score_B}{else /}未开始{/if}</td>
+                                <th align="center">{if condition="$vo.result_game== 1 "}{:getTeam($vo.team_A)}胜{elseif condition="$vo.result_game == 0"}平{else /}{:getTeam($vo.team_B)}胜 {/if}</th>
+                                <td align="center"><span class="red">{if condition="$time < $vo['game_time']"}--{elseif condition="$vo['game_result'] == $vo['result_game']"}中奖{else /}未中奖{/if}</span></td>
+                                <td align="center">{if condition="$time < $vo['game_time']"}--{elseif condition="$vo['status']==0"}未派奖{elseif condition="$vo['status']==1"}已派奖{else /} --{/if}</td>
+                                <td align="center">{$vo.guess_time|date="m-d H:i",###}</td>
+                            </tr>
+                            {/foreach}
+                        </table>
+                    </div>
+                </div>
+                <!-- 弹窗 - 我的预测 -->
+                <div class="hide" id="layerMyGuess2">
+                    <div class="scroll-wrap">
+                        <table class="flow-table">
+                            <tr class="green">
+                                <th style="padding-left: .2rem">预测项目</th>
+                                <th align="center" width="45%">我的预测</th>
+                                <th align="center">中奖状态</th>
+                                <th align="center">是否派彩</th>
+                                <th align="center">提交时间</th>
+                            </tr>
+                            {foreach $forecast as $vo}
+                            <tr>
+                                <td style="padding-left: .2rem">{switch name="vo.forecast_type"}
+                                    {case value="16"}16强{/case}
+                                    {case value="8"}8强{/case}
+                                    {case value="4"}四强{/case}
+                                    {case value="2"}决赛{/case}
+                                    {case value="1"}冠军{/case}
+                                    {/switch}
+                                </td>
+                                <td align="center"><div class="flow-vs-wrap"><span>{$vo.forecast_team}</span></div></td>
+                                <td align="center"><span class="red">{:getprize($vo.forecast_team,$vo.forecast_type)}</span></td>
+                                <td align="center">{if condition="$vo['status']==2"}--{elseif condition="$vo['prize']==0"}已派彩{elseif condition="$vo['prize']==1"}未派彩{else/}--{/if}</td>
+                                <td align="center">{$vo.forecast_time|date="m-d H:i",###}</td>
+                            </tr>
+                            {/foreach}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="hide" id="layerMyGuess3">我的精彩</div>
+                <div class="bet-channel">
+                    <a class="ch-1" href="{:url('/info',['id'=>1])}">第一步曲</a>
+                    <a class="ch-2" href="{:url('/info',['id'=>2])}">第二步曲</a>
+                    <a class="ch-3" href="{:url('/info',['id'=>3])}">第三步曲</a>
+                    <a class="ch-4" href="{:url('/info',['id'=>4])}">第四步曲</a>
+                    <a class="ch-5" href="{:url('/info',['id'=>5])}">第五步曲</a>
+                    <a class="ch-6" href="{:url('/info',['id'=>6])}">第六步曲</a>
+                    <a class="ch-7" href="{:url('/info',['id'=>7])}">第七步曲</a>
+                </div>
+            </div>
+        </div>
+        <div class="f f2">
+            <div class="container">
+                <div class="ball-title">赛程竞猜</div>
+                <div class="slide-flow">
+                    <div class="hd clearfix">
+                        <ul>
+                            <li>小组赛</li>
+                            <li>八分之一决赛</li>
+                            <li>四分之一决赛</li>
+                            <li>半决赛</li>
+                            <li>三四名决赛</li>
+                            <li>决赛</li>
+                        </ul>
+                    </div>
+                    <div class="bd">
+                        <ul>
+                            <li>
+                                <div class="slide-xiaozu">
+                                    <div class="xiaozu-hd clearfix">
+                                        <span>A组</span>
+                                        <span>B组</span>
+                                        <span>C组</span>
+                                        <span>D组</span>
+                                        <span>E组</span>
+                                        <span>F组</span>
+                                        <span>G组</span>
+                                        <span>H组</span>
+                                    </div>
+                                    <div class="xiaozu-bd">
+                                        {foreach name="zu" item="do" key="k"}
+                                        <form action="" method="post" class="form-flow-xz-{$k}">
+                                            <div class="scroll-wrap">
+                                                <table class="flow-table">
+                                                    {foreach name="do.1" item="vo" key="key"}
+                                                    <tr>
+                                                        <td class="td-1" >{$vo.game_time|date="m-d H:i",###}</td>
+                                                        <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                        <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                        <td class="td-4">
+                                                            <div class="flow-radio-wrap">
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="1"><span>胜</span></label>
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="0"><span>平</span></label>
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="-1"><span>胜</span></label>
+                                                                <input type="hidden" value="{$vo.id}" name="game_{$k}_{$key}">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {/foreach}
+                                                  {foreach name="do.2" item="vo" key="key"}
+                                                    <tr>
+                                                        <td class="td-1" >{$vo.game_time|date="m-d H:i",###}</td>
+                                                        <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                        <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                        <td class="td-4">
+                                                            <div class="flow-radio-wrap">
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="1"><span>胜</span></label>
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="0"><span>平</span></label>
+                                                                <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_{$k}_{$key}" value="-1"><span>胜</span></label>
+                                                                <input type="hidden" value="{$vo.id}" name="game_{$k}_{$key}">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {/foreach}
+                                                </table>
+                                            </div>
+                                            <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="{$k}" type="{$k}"><i></i>提交竞猜</a></div>
+                                        </form>
+                                        {/foreach}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-flow-4">
+                                    <div class="scroll-wrap">
+                                        <table class="flow-table">
+                                            {foreach name="game4" item="vo" key="k"}
+                                            <tr>
+                                                <td class="td-1">{$vo.game_time|date="m-d H:i",###}</td>
+                                                <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                <td class="td-4">
+                                                    <div class="flow-radio-wrap">
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_4_{$k}" value="1"><span>胜</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_4_{$k}" value="0"><span>平</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_4_{$k}" value="-1"><span>胜</span></label>
+                                                        <input type="hidden" value="{$vo.id}" name="game_4_{$k}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                        </table>
+                                    </div>
+                                    <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="4" type="16"><i></i>提交竞猜</a></div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-flow-5">
+                                    <div class="scroll-wrap">
+                                        <table class="flow-table">
+                                            {foreach name="game5" item="vo" key="k"}
+                                            <tr>
+                                                <td class="td-1">{$vo.game_time|date="m-d H:i",###}</td>
+                                                <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                <td class="td-4">
+                                                    <div class="flow-radio-wrap">
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_5_{$k}" value="1"><span>胜</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_5_{$k}" value="0"><span>平</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_5_{$k}" value="-1"><span>胜</span></label>
+                                                        <input type="hidden" value="{$vo.id}" name="game_5_{$k}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                        </table>
+                                    </div>
+                                    <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="5" type="8"><i></i>提交竞猜</a></div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-flow-6">
+                                    <div class="scroll-wrap">
+                                        <table class="flow-table">
+                                            {foreach name="game6" item="vo" key="k"}
+                                            <tr>
+                                                <td class="td-1">{$vo.game_time|date="m-d H:i",###}</td>
+                                                <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                <td class="td-4">
+                                                    <div class="flow-radio-wrap">
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_6_{$k}" value="1"><span>胜</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_6_{$k}" value="0"><span>平</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_6_{$k}" value="-1"><span>胜</span></label>
+                                                        <input type="hidden" value="{$vo.id}" name="game_6_{$k}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                        </table>
+                                    </div>
+                                    <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="6" type="4"><i></i>提交竞猜</a></div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-flow-7">
+                                    <div class="scroll-wrap">
+                                        <table class="flow-table">
+                                            {foreach name="game7" item="vo" key="k"}
+                                            <tr>
+                                                <td class="td-1">{$vo.game_time|date="m-d H:i",###}</td>
+                                                <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                <td class="td-4">
+                                                    <div class="flow-radio-wrap">
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_7_{$k}" value="1"><span>胜</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_7_{$k}" value="0"><span>平</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_7_{$k}" value="-1"><span>胜</span></label>
+                                                        <input type="hidden" value="{$vo.id}" name="game_7_{$k}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+
+                                        </table>
+                                    </div>
+                                    <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="7" type="3"><i></i>提交竞猜</a></div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-flow-8">
+                                    <div class="scroll-wrap">
+                                        <table class="flow-table">
+                                            {foreach name="game8" item="vo" key="k"}
+                                            <tr>
+                                                <td class="td-1">{$vo.game_time|date="m-d H:i",###}</td>
+                                                <td class="td-2"><div class="flow-vs-wrap"><span class="vs-1">{:getTeamName($vo['team_A'])}</span><img src="/{:getTeamLogo($vo['team_A'])}" alt="" class="flag"/><span>VS</span><img src="/{:getTeamLogo($vo['team_B'])}" alt="" class="flag"/><span>{:getTeamName($vo['team_B'])}</span></div></td>
+                                                <td class="td-3">{if condition="getGameStatus($vo['game_time']) eq 1"}<font style="color: red;">{$vo.score_A} : {$vo.score_B}</font>{else/}{:getGameStatus($vo.game_time)}{/if}</td>
+                                                <td class="td-4">
+                                                    <div class="flow-radio-wrap">
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_8_{$k}" value="1"><span>胜</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_8_{$k}" value="0"><span>平</span></label>
+                                                        <label><input {if condition="$time > $vo['game_time']"}disabled{/if} type="radio" name="flow_8_{$k}" value="-1"><span>胜</span></label>
+                                                        <input type="hidden" value="{$vo.id}" name="game_8_{$k}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                        </table>
+                                    </div>
+                                    <div class="btn-wrap"><a href="javascript:;" class="btn btn-blue j-submit guess"  rels="8" type="2"><i></i>提交竞猜</a></div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="f f3">
+            <div class="container">
+                <div class="ball-title">预测大帝<span style="font-size:.25rem">（预测开始时间为2018年6月1号0点）</span></div>
+                <div class="slide-guess">
+                    <div class="hd clearfix">
+                        <ul>
+                            <li><h3>预测16强</h3><p>预测截止时间：<br>{$setting.fore_sixteen_end_time|date='n月j日G时',###}</p></li>
+                            <li><h3>预测8强</h3><p>预测截止时间：<br>{$setting.fore_eight_end_time|date='n月j日G时',###}</p></li>
+                            <li><h3>预测4强</h3><p>预测截止时间：<br>{$setting.fore_four_end_time|date='n月j日G时',###}</p></li>
+                            <li><h3>预测决赛</h3><p>预测截止时间：<br>{$setting.fore_two_end_time|date='n月j日G时',###}</p></li>
+                            <li><h3>预测冠军</h3><p>预测截止时间：<br>{$setting.fore_one_end_time|date='n月j日G时',###}</p></li>
+                        </ul>
+                    </div>
+                    <div class="bd">
+                        <ul>
+                            <li>
+                                <form action="" method="post" class="form-guess-1">
+                                    <div class="guess-result" maxlength="16"></div>
+                                    <div class="guess-table">
+                                        <dl>
+                                            <dt>A组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-aiji.png" alt="" class="flag-o"><div class="in"><p>埃及</p><p>Egypt</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-eluosi.png" alt="" class="flag-o"><div class="in"><p>俄罗斯</p><p>Russia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-wulagui.png" alt="" class="flag-o"><div class="in"><p>乌拉圭</p><p>Uruguary</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-shate.png" alt="" class="flag-o"><div class="in"><p>沙特</p><p>Saudi Arabia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>B组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-moluoge.png" alt="" class="flag-o"><div class="in"><p>摩洛哥</p><p>Morocco</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-putaoya.png" alt="" class="flag-o"><div class="in"><p>葡萄牙</p><p>Portugal</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-xibanya.png" alt="" class="flag-o"><div class="in"><p>西班牙</p><p>Spain</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-yilang.png" alt="" class="flag-o"><div class="in"><p>伊朗</p><p>Iran</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>C组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-aodaliya.png" alt="" class="flag-o"><div class="in"><p>澳大利亚</p><p>Australia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-bilu.png" alt="" class="flag-o"><div class="in"><p>秘鲁</p><p>Peru</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-danmai.png" alt="" class="flag-o"><div class="in"><p>丹麦</p><p>Denmark</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-faguo.png" alt="" class="flag-o"><div class="in"><p>法国</p><p>France</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>D组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-agenting.png" alt="" class="flag-o"><div class="in"><p>阿根廷</p><p>Argentina</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-bingdao.png" alt="" class="flag-o"><div class="in"><p>冰岛</p><p>Iceland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-keluodiya.png" alt="" class="flag-o"><div class="in"><p>克罗地亚</p><p>Croatia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-niriliya.png" alt="" class="flag-o"><div class="in"><p>尼日利亚</p><p>Nigeria</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>E组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-baxi.png" alt="" class="flag-o"><div class="in"><p>巴西</p><p>Brazil</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-gesidalijia.png" alt="" class="flag-o"><div class="in"><p>哥斯达黎加</p><p>Costa Rica</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-ruishi.png" alt="" class="flag-o"><div class="in"><p>瑞士</p><p>Switzerland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-saierweiya.png" alt="" class="flag-o"><div class="in"><p>塞尔维亚</p><p>Serbia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>F组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-deguo.png" alt="" class="flag-o"><div class="in"><p>德国</p><p>Germany</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-hanguo.png" alt="" class="flag-o"><div class="in"><p>韩国</p><p>Korea</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-moxige.png" alt="" class="flag-o"><div class="in"><p>墨西哥</p><p>Mexico</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-ruidian.png" alt="" class="flag-o"><div class="in"><p>瑞典</p><p>Sweden</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>G组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-banama.png" alt="" class="flag-o"><div class="in"><p>巴拿马</p><p>Panama</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-bilishi.png" alt="" class="flag-o"><div class="in"><p>比利时</p><p>Belgium</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-tunisi.png" alt="" class="flag-o"><div class="in"><p>突尼斯</p><p>Tunisia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-yinggelan.png" alt="" class="flag-o"><div class="in"><p>英格兰</p><p>England</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>H组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-bolan.png" alt="" class="flag-o"><div class="in"><p>波兰</p><p>Poland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-gelunbiya.png" alt="" class="flag-o"><div class="in"><p>哥伦比亚</p><p>Columbia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-riben.png" alt="" class="flag-o"><div class="in"><p>日本</p><p>Japan</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-saineijiaer.png" alt="" class="flag-o"><div class="in"><p>塞内加尔</p><p>Senegal</p></div></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="btn-wrap">
+                                        <a href="javascript:;" class="btn btn-blue j-reset">重选</a>
+                                        <a href="javascript:;" class="btn btn-blue j-submit forecast">提交</a>
+                                        <input type="hidden" name="guessArr">
+                                    </div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-guess-2">
+                                    <div class="guess-result" maxlength="8"></div>
+                                    <div class="guess-table">
+                                        <dl>
+                                            <dt>A组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-aiji.png" alt="" class="flag-o"><div class="in"><p>埃及</p><p>Egypt</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-eluosi.png" alt="" class="flag-o"><div class="in"><p>俄罗斯</p><p>Russia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-wulagui.png" alt="" class="flag-o"><div class="in"><p>乌拉圭</p><p>Uruguary</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-shate.png" alt="" class="flag-o"><div class="in"><p>沙特</p><p>Saudi Arabia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>B组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-moluoge.png" alt="" class="flag-o"><div class="in"><p>摩洛哥</p><p>Morocco</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-putaoya.png" alt="" class="flag-o"><div class="in"><p>葡萄牙</p><p>Portugal</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-xibanya.png" alt="" class="flag-o"><div class="in"><p>西班牙</p><p>Spain</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-yilang.png" alt="" class="flag-o"><div class="in"><p>伊朗</p><p>Iran</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>C组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-aodaliya.png" alt="" class="flag-o"><div class="in"><p>澳大利亚</p><p>Australia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-bilu.png" alt="" class="flag-o"><div class="in"><p>秘鲁</p><p>Peru</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-danmai.png" alt="" class="flag-o"><div class="in"><p>丹麦</p><p>Denmark</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-faguo.png" alt="" class="flag-o"><div class="in"><p>法国</p><p>France</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>D组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-agenting.png" alt="" class="flag-o"><div class="in"><p>阿根廷</p><p>Argentina</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-bingdao.png" alt="" class="flag-o"><div class="in"><p>冰岛</p><p>Iceland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-keluodiya.png" alt="" class="flag-o"><div class="in"><p>克罗地亚</p><p>Croatia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-niriliya.png" alt="" class="flag-o"><div class="in"><p>尼日利亚</p><p>Nigeria</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>E组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-baxi.png" alt="" class="flag-o"><div class="in"><p>巴西</p><p>Brazil</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-gesidalijia.png" alt="" class="flag-o"><div class="in"><p>哥斯达黎加</p><p>Costa Rica</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-ruishi.png" alt="" class="flag-o"><div class="in"><p>瑞士</p><p>Switzerland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-saierweiya.png" alt="" class="flag-o"><div class="in"><p>塞尔维亚</p><p>Serbia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>F组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-deguo.png" alt="" class="flag-o"><div class="in"><p>德国</p><p>Germany</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-hanguo.png" alt="" class="flag-o"><div class="in"><p>韩国</p><p>Korea</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-moxige.png" alt="" class="flag-o"><div class="in"><p>墨西哥</p><p>Mexico</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-ruidian.png" alt="" class="flag-o"><div class="in"><p>瑞典</p><p>Sweden</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>G组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-banama.png" alt="" class="flag-o"><div class="in"><p>巴拿马</p><p>Panama</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-bilishi.png" alt="" class="flag-o"><div class="in"><p>比利时</p><p>Belgium</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-tunisi.png" alt="" class="flag-o"><div class="in"><p>突尼斯</p><p>Tunisia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-yinggelan.png" alt="" class="flag-o"><div class="in"><p>英格兰</p><p>England</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>H组</dt>
+                                            <dd><img src="images/flago/flago-h-bolan.png" alt="" class="flag-o"><div class="in"><p>波兰</p><p>Poland</p></div></dd>
+                                            <dd><img src="images/flago/flago-h-gelunbiya.png" alt="" class="flag-o"><div class="in"><p>哥伦比亚</p><p>Columbia</p></div></dd>
+                                            <dd><img src="images/flago/flago-h-riben.png" alt="" class="flag-o"><div class="in"><p>日本</p><p>Japan</p></div></dd>
+                                            <dd><img src="images/flago/flago-h-saineijiaer.png" alt="" class="flag-o"><div class="in"><p>塞内加尔</p><p>Senegal</p></div></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="btn-wrap">
+                                        <a href="javascript:;" class="btn btn-blue j-reset">重选</a>
+                                        <a href="javascript:;" class="btn btn-blue j-submit forecast">提交</a>
+                                        <input type="hidden" name="guessArr">
+                                    </div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-guess-3">
+                                    <div class="guess-result" maxlength="4"></div>
+                                    <div class="guess-table">
+                                        <dl>
+                                            <dt>A组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-aiji.png" alt="" class="flag-o"><div class="in"><p>埃及</p><p>Egypt</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-eluosi.png" alt="" class="flag-o"><div class="in"><p>俄罗斯</p><p>Russia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-wulagui.png" alt="" class="flag-o"><div class="in"><p>乌拉圭</p><p>Uruguary</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-shate.png" alt="" class="flag-o"><div class="in"><p>沙特</p><p>Saudi Arabia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>B组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-moluoge.png" alt="" class="flag-o"><div class="in"><p>摩洛哥</p><p>Morocco</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-putaoya.png" alt="" class="flag-o"><div class="in"><p>葡萄牙</p><p>Portugal</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-xibanya.png" alt="" class="flag-o"><div class="in"><p>西班牙</p><p>Spain</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-yilang.png" alt="" class="flag-o"><div class="in"><p>伊朗</p><p>Iran</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>C组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-aodaliya.png" alt="" class="flag-o"><div class="in"><p>澳大利亚</p><p>Australia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-bilu.png" alt="" class="flag-o"><div class="in"><p>秘鲁</p><p>Peru</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-danmai.png" alt="" class="flag-o"><div class="in"><p>丹麦</p><p>Denmark</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-faguo.png" alt="" class="flag-o"><div class="in"><p>法国</p><p>France</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>D组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-agenting.png" alt="" class="flag-o"><div class="in"><p>阿根廷</p><p>Argentina</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-bingdao.png" alt="" class="flag-o"><div class="in"><p>冰岛</p><p>Iceland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-keluodiya.png" alt="" class="flag-o"><div class="in"><p>克罗地亚</p><p>Croatia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-niriliya.png" alt="" class="flag-o"><div class="in"><p>尼日利亚</p><p>Nigeria</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>E组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-baxi.png" alt="" class="flag-o"><div class="in"><p>巴西</p><p>Brazil</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-gesidalijia.png" alt="" class="flag-o"><div class="in"><p>哥斯达黎加</p><p>Costa Rica</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-ruishi.png" alt="" class="flag-o"><div class="in"><p>瑞士</p><p>Switzerland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-saierweiya.png" alt="" class="flag-o"><div class="in"><p>塞尔维亚</p><p>Serbia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>F组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-deguo.png" alt="" class="flag-o"><div class="in"><p>德国</p><p>Germany</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-hanguo.png" alt="" class="flag-o"><div class="in"><p>韩国</p><p>Korea</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-moxige.png" alt="" class="flag-o"><div class="in"><p>墨西哥</p><p>Mexico</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-ruidian.png" alt="" class="flag-o"><div class="in"><p>瑞典</p><p>Sweden</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>G组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-banama.png" alt="" class="flag-o"><div class="in"><p>巴拿马</p><p>Panama</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-bilishi.png" alt="" class="flag-o"><div class="in"><p>比利时</p><p>Belgium</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-tunisi.png" alt="" class="flag-o"><div class="in"><p>突尼斯</p><p>Tunisia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-yinggelan.png" alt="" class="flag-o"><div class="in"><p>英格兰</p><p>England</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>H组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-bolan.png" alt="" class="flag-o"><div class="in"><p>波兰</p><p>Poland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-gelunbiya.png" alt="" class="flag-o"><div class="in"><p>哥伦比亚</p><p>Columbia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-riben.png" alt="" class="flag-o"><div class="in"><p>日本</p><p>Japan</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-saineijiaer.png" alt="" class="flag-o"><div class="in"><p>塞内加尔</p><p>Senegal</p></div></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="btn-wrap">
+                                        <a href="javascript:;" class="btn btn-blue j-reset">重选</a>
+                                        <a href="javascript:;" class="btn btn-blue j-submit forecast">提交</a>
+                                        <input type="hidden" name="guessArr">
+                                    </div>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="" method="post" class="form-guess-4">
+                                    <div class="guess-result" maxlength="2"></div>
+                                    <div class="guess-table">
+                                        <dl>
+                                            <dt>A组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-aiji.png" alt="" class="flag-o"><div class="in"><p>埃及</p><p>Egypt</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-eluosi.png" alt="" class="flag-o"><div class="in"><p>俄罗斯</p><p>Russia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-wulagui.png" alt="" class="flag-o"><div class="in"><p>乌拉圭</p><p>Uruguary</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-shate.png" alt="" class="flag-o"><div class="in"><p>沙特</p><p>Saudi Arabia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>B组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-moluoge.png" alt="" class="flag-o"><div class="in"><p>摩洛哥</p><p>Morocco</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-putaoya.png" alt="" class="flag-o"><div class="in"><p>葡萄牙</p><p>Portugal</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-xibanya.png" alt="" class="flag-o"><div class="in"><p>西班牙</p><p>Spain</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-yilang.png" alt="" class="flag-o"><div class="in"><p>伊朗</p><p>Iran</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>C组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-aodaliya.png" alt="" class="flag-o"><div class="in"><p>澳大利亚</p><p>Australia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-bilu.png" alt="" class="flag-o"><div class="in"><p>秘鲁</p><p>Peru</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-danmai.png" alt="" class="flag-o"><div class="in"><p>丹麦</p><p>Denmark</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-faguo.png" alt="" class="flag-o"><div class="in"><p>法国</p><p>France</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>D组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-agenting.png" alt="" class="flag-o"><div class="in"><p>阿根廷</p><p>Argentina</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-bingdao.png" alt="" class="flag-o"><div class="in"><p>冰岛</p><p>Iceland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-keluodiya.png" alt="" class="flag-o"><div class="in"><p>克罗地亚</p><p>Croatia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-niriliya.png" alt="" class="flag-o"><div class="in"><p>尼日利亚</p><p>Nigeria</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>E组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-baxi.png" alt="" class="flag-o"><div class="in"><p>巴西</p><p>Brazil</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-gesidalijia.png" alt="" class="flag-o"><div class="in"><p>哥斯达黎加</p><p>Costa Rica</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-ruishi.png" alt="" class="flag-o"><div class="in"><p>瑞士</p><p>Switzerland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-saierweiya.png" alt="" class="flag-o"><div class="in"><p>塞尔维亚</p><p>Serbia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>F组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-deguo.png" alt="" class="flag-o"><div class="in"><p>德国</p><p>Germany</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-hanguo.png" alt="" class="flag-o"><div class="in"><p>韩国</p><p>Korea</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-moxige.png" alt="" class="flag-o"><div class="in"><p>墨西哥</p><p>Mexico</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-ruidian.png" alt="" class="flag-o"><div class="in"><p>瑞典</p><p>Sweden</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>G组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-banama.png" alt="" class="flag-o"><div class="in"><p>巴拿马</p><p>Panama</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-bilishi.png" alt="" class="flag-o"><div class="in"><p>比利时</p><p>Belgium</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-tunisi.png" alt="" class="flag-o"><div class="in"><p>突尼斯</p><p>Tunisia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-yinggelan.png" alt="" class="flag-o"><div class="in"><p>英格兰</p><p>England</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>H组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-bolan.png" alt="" class="flag-o"><div class="in"><p>波兰</p><p>Poland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-gelunbiya.png" alt="" class="flag-o"><div class="in"><p>哥伦比亚</p><p>Columbia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-riben.png" alt="" class="flag-o"><div class="in"><p>日本</p><p>Japan</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-saineijiaer.png" alt="" class="flag-o"><div class="in"><p>塞内加尔</p><p>Senegal</p></div></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="btn-wrap">
+                                        <a href="javascript:;" class="btn btn-blue j-reset">重选</a>
+                                        <a href="javascript:;" class="btn btn-blue j-submit forecast">提交</a>
+                                        <input type="hidden" name="guessArr">
+                                    </div>
+                                </form>
+                            </li>
+                          <li>
+                                <form action="" method="post" class="form-guess-5">
+                                    <div class="guess-result" maxlength="1"></div>
+                                    <div class="guess-table">
+                                        <dl>
+                                            <dt>A组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-aiji.png" alt="" class="flag-o"><div class="in"><p>埃及</p><p>Egypt</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-eluosi.png" alt="" class="flag-o"><div class="in"><p>俄罗斯</p><p>Russia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-wulagui.png" alt="" class="flag-o"><div class="in"><p>乌拉圭</p><p>Uruguary</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-a-shate.png" alt="" class="flag-o"><div class="in"><p>沙特</p><p>Saudi Arabia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>B组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-moluoge.png" alt="" class="flag-o"><div class="in"><p>摩洛哥</p><p>Morocco</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-putaoya.png" alt="" class="flag-o"><div class="in"><p>葡萄牙</p><p>Portugal</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-xibanya.png" alt="" class="flag-o"><div class="in"><p>西班牙</p><p>Spain</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-b-yilang.png" alt="" class="flag-o"><div class="in"><p>伊朗</p><p>Iran</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>C组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-aodaliya.png" alt="" class="flag-o"><div class="in"><p>澳大利亚</p><p>Australia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-bilu.png" alt="" class="flag-o"><div class="in"><p>秘鲁</p><p>Peru</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-danmai.png" alt="" class="flag-o"><div class="in"><p>丹麦</p><p>Denmark</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-c-faguo.png" alt="" class="flag-o"><div class="in"><p>法国</p><p>France</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>D组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-agenting.png" alt="" class="flag-o"><div class="in"><p>阿根廷</p><p>Argentina</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-bingdao.png" alt="" class="flag-o"><div class="in"><p>冰岛</p><p>Iceland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-keluodiya.png" alt="" class="flag-o"><div class="in"><p>克罗地亚</p><p>Croatia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-d-niriliya.png" alt="" class="flag-o"><div class="in"><p>尼日利亚</p><p>Nigeria</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>E组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-baxi.png" alt="" class="flag-o"><div class="in"><p>巴西</p><p>Brazil</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-gesidalijia.png" alt="" class="flag-o"><div class="in"><p>哥斯达黎加</p><p>Costa Rica</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-ruishi.png" alt="" class="flag-o"><div class="in"><p>瑞士</p><p>Switzerland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-e-saierweiya.png" alt="" class="flag-o"><div class="in"><p>塞尔维亚</p><p>Serbia</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>F组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-deguo.png" alt="" class="flag-o"><div class="in"><p>德国</p><p>Germany</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-hanguo.png" alt="" class="flag-o"><div class="in"><p>韩国</p><p>Korea</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-moxige.png" alt="" class="flag-o"><div class="in"><p>墨西哥</p><p>Mexico</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-f-ruidian.png" alt="" class="flag-o"><div class="in"><p>瑞典</p><p>Sweden</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>G组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-banama.png" alt="" class="flag-o"><div class="in"><p>巴拿马</p><p>Panama</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-bilishi.png" alt="" class="flag-o"><div class="in"><p>比利时</p><p>Belgium</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-tunisi.png" alt="" class="flag-o"><div class="in"><p>突尼斯</p><p>Tunisia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-g-yinggelan.png" alt="" class="flag-o"><div class="in"><p>英格兰</p><p>England</p></div></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>H组</dt>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-bolan.png" alt="" class="flag-o"><div class="in"><p>波兰</p><p>Poland</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-gelunbiya.png" alt="" class="flag-o"><div class="in"><p>哥伦比亚</p><p>Columbia</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-riben.png" alt="" class="flag-o"><div class="in"><p>日本</p><p>Japan</p></div></dd>
+                                            <dd><img src="__INDEX__/images/flago/flago-h-saineijiaer.png" alt="" class="flag-o"><div class="in"><p>塞内加尔</p><p>Senegal</p></div></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="btn-wrap">
+                                        <a href="javascript:;" class="btn btn-blue j-reset">重选</a>
+                                        <a href="javascript:;" class="btn btn-blue j-submit forecast">提交</a>
+                                        <input type="hidden" name="guessArr">
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rule-wrapper">
+				<a href="{:url('/rule')}"><img src="__INDEX__/images/ruleicon.png" /></a>
+		</div>
+        <div class="footer">
+			2018世界杯官方指定投注机构<br />
+			www.bet365.com.cn
+		</div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        /*   -----竞猜提交------   */
+        $('.guess').click(function () {
+            var arr=[];
+            var j=$(this).attr('rels');
+            var type=$(this).attr('type');
+            var n=$(this).parent().siblings('.scroll-wrap').find('tr').length;
+            for(var i=0;i<n;i++){
+                arr[i]=[];
+                for(var a=0;a<2;a++){
+                    if(a==0){
+                        arr[i][a]=$("input[name='flow_"+j+"_"+i+"']:checked").val();
+                    }else{
+                        arr[i][a]=$("input[name='game_"+j+"_"+i+"']").val();
+                    }
+                }
+            }
+            var url="{:url('/guess')}";
+            $.post(url,{project:arr,type:type},function (data) {
+                if(data.code==2){
+                    var layerMember = $("#layerMember");
+                    if(layerMember.hasClass('j-autoshow')){
+                        var w = $(window).width();
+                        w = w < 720 ? w : 700;
+                        layer.tab({
+                            area: [w + 'px', 'auto'],
+                            shade: [0.6, '#06632b'],
+                            content: $("#layerMember"),
+                            title: false
+                        })
+                    }
+
+                }else if(data.code==1){
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        window.location.reload();
+                    },1000)
+
+                }
+            })
+        });
+        /*   -----用户登陆------   */
+        $('.input-submit').click(function () {
+            var user=$('#input-text').val();
+            //alert(user);
+            if(user==""){
+                layer.msg('请输入用户名！');
+            }else{
+                var url="{:url('/reg')}";
+                $.post(url,{user:user},function (data) {
+                    if(data.code==0){
+                        layer.msg(data.msg);
+
+                        setTimeout(function () {
+                            layer.closeAll();
+                         window.location.reload();
+                        },2000)
+
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                })
+            }
+        });
+
+        /*   -----预测提交------   */
+        $('.forecast').click(function () {
+            var type=$(this).parent().siblings('.guess-result').attr('maxlength');
+            var span=$(this).parent().siblings('.guess-result').children();
+            var html=""
+                span.each(function () {
+                 html=html+','+$(this).text();
+            });
+            if (html==""){
+                layer.msg('预测队伍不能为空！')
+            }else{
+                var url="{:url('/forecast')}";
+                $.post(url,{type:type,html:html},function (data) {
+                    if(data.code==2){
+                        var layerMember = $("#layerMember");
+                        if(layerMember.hasClass('j-autoshow')){
+                            var w = $(window).width();
+                            w = w < 720 ? w : 700;
+                            layer.tab({
+                                area: [w + 'px', 'auto'],
+                                shade: [0.6, '#06632b'],
+                                content: $("#layerMember"),
+                                title: false
+                            })
+                        }
+
+                    }else{
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000)
+
+                    }
+                },'json')
+
+            }
+
+        })
+    })
+</script>
+</html>

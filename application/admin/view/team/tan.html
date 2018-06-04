@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        *{
+            margin: 0px;
+            padding: 0px;
+            border: none;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .box{
+            width: 100%;
+            height: 40px;
+            text-align: center;
+        }
+
+        input{
+            display: none;
+        }
+
+        label{
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            position: relative;
+            line-height: 40px;
+            color: #999;
+        }
+        label:active{
+            background: #EEEEEE;
+        }
+        label:after{
+            content: "";/*必须设置*/
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid green;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            border-radius: 20px;
+        }
+
+        input:checked+label:after{
+            background-color: green;
+        }
+
+        .line{
+            width: 100%;
+            height: 1px;
+            background: #ccc;
+            opacity: 0.2;
+        }
+    </style>
+    <script src="__ADMIN__/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="__ADMIN__/layer/layer.js"></script>
+</head>
+<body>
+    <p><font color="#a52a2a">注意：</font>分配队伍排名开放时间如下</p>
+    <p>   16强添加开始时间：<font color="red">{$list.sixteen_date|date="Y-m-d H:i:s",###}</font></p>
+    <p>   8强添加开始时间：<font color="red">{$list.eight_date|date="Y-m-d H:i:s",###}</font></p>
+    <p>   4强添加开始时间：<font color="red">{$list.four_date|date="Y-m-d H:i:s",###}</font></p>
+    <p>   2强添加开始时间：<font color="red">{$list.two_date|date="Y-m-d H:i:s",###}</font></p>
+    <p>   请在规定的时间段内进行操作</p>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio1" name="radio" value="16" {if condition="$list.sixteen_date > $time"}disabled{/if}/><label for="radio1">16强</label>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio2" name="radio" value="8" {if condition="$list.eight_date > $time"}disabled {/if}/><label for="radio2" >8强</label>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio3" name="radio" value="4" {if condition="$list.four_date > $time"}disabled {/if}/><label for="radio3">4强</label>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio4" name="radio" value="3" {if condition="$list.three_date > $time"}disabled {/if}/><label for="radio4">季军</label>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio5" name="radio" value="2" {if condition="$list.two_date > $time"}disabled {/if}/><label for="radio5">亚军</label>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <input type="radio"  id="radio6" name="radio" value="1" {if condition="$list.one_date > $time"}disabled {/if}/><label for="radio6">冠军</label>
+    </div>
+    <input type="hidden"   name="post_id" value="{$id.id}"/>
+    <div class="line"></div>
+    <button class="button" style="width: 80px;height: 40px;background: #2b91af;border-radius: 20px;margin-left: 20%;">提交</button>
+</body>
+<script>
+    $(function () {
+        $('.button').click(function () {
+            var best_type=$("input[name='radio']:checked").val();
+            var id=$("input[name='post_id']").val();
+            if(best_type==""){
+                layer.msg('请选择分配内容');
+            }else{
+                var url="{:url('/tan')}";
+                $.post(url,{best_type:best_type,id:id},function (data) {
+                    if(data.code==0){
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            window.parent.location.reload();
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        },1000)
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },'json')
+            }
+
+        });
+    })
+</script>
+</html>

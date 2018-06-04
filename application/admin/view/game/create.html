@@ -1,0 +1,133 @@
+<div class="col-lg-12">
+    <!-- Start col-lg-12 -->
+    <div class="panel panel-default toggle" id="spr_0">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">添加赛程</h3>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="toggle panel-minimize">
+                <i class="im-minus"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal group-border hover-stripped" role="form" id="from">
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">比赛开始时间：</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                <div class="input-group">
+                                    <input class="form-control datetime-picker" type="text" value="" id="game_time" name="game_time">
+                                    <span class="input-group-addon"><i class="fa-calendar"></i></span>
+                                </div>
+                                <span class="help-block">请选择</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">比赛类型</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="row" style="width: 40%;">
+                            <div class="col-lg-6 col-md-6">
+                                <select class="form-control" name="game_type" id="select1">
+                                    <optgroup>
+                                        <option value="">——请选择——</option>
+                                        <option value="A">小组赛A组</option>
+                                        <option value="B">小组赛B组</option>
+                                        <option value="C">小组赛C组</option>
+                                        <option value="D">小组赛D组</option>
+                                        <option value="E">小组赛E组</option>
+                                        <option value="F">小组赛F组</option>
+                                        <option value="G">小组赛G组</option>
+                                        <option value="H">小组赛H组</option>
+                                        <option value="16">1/8赛</option>
+                                        <option value="8">1/4赛</option>
+                                        <option value="4">半决赛</option>
+                                        <option value="3">三四名决赛</option>
+                                        <option value="2">决赛</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">比赛队伍</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="cc" >
+                            <span style="margin-left: 7%;">队伍1</span><span style="margin-left: 20%;">队伍2</span>
+                        </div>
+
+                            <div class="col-lg-6 col-md-6" style="width: 20%">
+                                <select class="form-control" name="team_A">
+                                    <optgroup class="menu">
+
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 col-md-6" style="width: 2%">vs</div>
+                            <div class="col-lg-6 col-md-6" style="width: 20%">
+                                <select class="form-control" name="team_B">
+                                    <optgroup class="menu">
+
+                                    </optgroup>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label"></label>
+                    <div class="col-lg-10 col-md-10">
+                    <button type="button" class="btn btn-purple">添加</button>
+                <!-- End .form-group  -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End .panel -->
+</div>
+<script>
+    laydate.render({
+        elem: '#game_time'
+        ,type: 'datetime'
+    });
+    $(function () {
+        $('#select1').change(function () {
+            var type=$(this).val();
+            var url="{:url('/game/create')}";
+            $.post(url,{game_type:type},function (data) {
+                 if(data.code==0){
+                      var menu=data.info;
+                      var len=menu.length;
+                      var html=""
+                     for(var i=0;i<len;i++){
+                         html=html+"<option value='"+menu[i].id+"'>"+menu[i].team_name+"</option>"
+                     }
+                     $('.menu').html(html);
+                 }else{
+                     layer.msg(data.msg)
+                 }
+            },'json')
+        });
+        $('.btn-purple').click(function () {
+            var formData=$('#from').serialize();
+            var url="{:url('/game/add')}";
+           $.post(url,formData,function(data){
+               if(data.code==0){
+                   layer.msg(data.msg);
+               }else{
+                   layer.alert(data.msg, {
+                       skin: 'layui-layer-lan'
+                       ,closeBtn: 0,
+                       title:'提示'
+                       ,icon:2
+
+                   });
+               }
+           },'json')
+
+        });
+    })
+</script>

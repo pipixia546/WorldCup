@@ -1,0 +1,108 @@
+<div class="col-lg-12">
+    <!-- Start col-lg-12 -->
+    <div class="panel panel-default toggle" id="spr_0">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">添加球队</h3>
+            <div class="panel-controls panel-controls-hide" style="display: none;">
+                <a href="#" class="toggle panel-minimize">
+                <i class="im-minus"></i></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal group-border hover-stripped" role="form" id="from">
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">球队名称</label>
+                    <div class="col-lg-10 col-md-10">
+                        <input type="text" class="form-control" placeholder="请输入球队名称" autofocus="autofocus" name="team_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">选择分组</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <select class="form-control" name="team_group">
+                                    <optgroup>
+                                        <option value="A">A组</option>
+                                        <option value="B">B组</option>
+                                        <option value="C">C组</option>
+                                        <option value="D">D组</option>
+                                        <option value="E">E组</option>
+                                        <option value="F">F组</option>
+                                        <option value="G">G组</option>
+                                        <option value="H">H组</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">小组位次</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <select class="form-control" name="group_number">
+                                    <optgroup>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label">上传图片</label>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <input type="file" name="team_logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-2 col-sm-12 control-label"></label>
+                    <div class="col-lg-10 col-md-10">
+                    <button type="button" class="btn btn-purple">添加</button>
+                <!-- End .form-group  -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End .panel -->
+</div>
+<script>
+    $(function () {
+        $('.btn-purple').click(function () {
+            var formData=new FormData($('#from')[0]);
+            var url="{:url('admin/team/create')}";
+            $.ajax({
+                url: url ,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data.code==0){
+                        layer.msg(data.msg);
+                        window.location.reload();
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan',closeBtn: 0
+                        });
+                    }
+                },
+            });
+        });
+    })
+</script>

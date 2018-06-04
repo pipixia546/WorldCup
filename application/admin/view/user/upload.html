@@ -1,0 +1,132 @@
+
+<div class="row">
+    <!-- Start .row -->
+    <div class="col-lg-12">
+        <!-- col-lg-12 start here -->
+        <div class="panel panel-default plain toggle panelClose panelRefresh" id="spr_3" >
+            <!-- Start .panel -->
+            <div class="panel-heading white-bg">
+                <h4 class="panel-title">用户上传</h4>
+                <div style=" margin-top: 50px;">
+                    <form class="form-horizontal group-border hover-stripped" role="form" id="from">
+                        <div class="input-group" style="width: 100%;">
+                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">上传用户</label>
+                            <div class="col-lg-10 col-md-10">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                       <input type="file" class="form-control" name="user" style="width: 20%;">
+                                       <span style="display: block;float: left">
+                                       <input type="button" class="btn btn-purple" value="上传"/>
+                                       </span>
+                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group" style="width: 100%;margin-top:3%;">
+                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">添加用户</label>
+                            <div class="col-lg-10 col-md-10">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                       <input type="text" class="form-control" name="user_dan" style="width: 40%;" >
+                                       <span style="display: block;float: left">
+                                       <input type="button" class="btn user_dan" value="添加"/>
+                                       </span>
+                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: auto;"><div class="table-responsive" style="overflow: hidden; width: 100%; height: auto;">
+                    <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>用户列表</th>
+                        <th>操作人</th>
+                        <th>上传时间</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name="list" item="do" key="k"}
+                    <tr>
+                        <td>
+                            {$do.user}
+                        </td>
+                        <td>{$do.add_user}</td>
+                        <td>{$do.addtime|date="Y-m-d H:i:s",###}</td>
+
+
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table></div><div class="slimScrollBar ui-draggable" style="background: rgb(153, 153, 153); height: 5px; position: absolute; bottom: 3px; opacity: 0.4; display: none; border-radius: 5px; z-index: 99; width: 1057px; left: 0px;"></div><div class="slimScrollRail" style="width: 100%; height: 5px; position: absolute; bottom: 3px; display: none; border-radius: 5px; background: rgb(51, 51, 51); opacity: 0.5; z-index: 90;"></div></div>
+                {$list->render()}
+            </div>
+
+        </div>
+        <!-- End .panel -->
+    </div>
+
+    <!-- col-lg-12 end here -->
+</div>
+
+<script>
+    $(function () {
+        $('.user_dan').click(function(){
+          
+            var user=$('input[name="user_dan"]').val();
+            if(user==""){
+              layer.msg('用户名不能为空！');
+              
+              }else{
+             var url="{:url('/user/uploadone')}";
+             $.post(url,{user:user},function(data){
+                if(data.code==0){
+                  layer.msg(data.msg);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },2000)
+                }else{
+                   layer.alert(data.msg, {
+                            skin: 'layui-layer-lan',closeBtn: 0
+                        });
+                
+                }
+             
+             },'json')
+           }
+        });
+        $('.btn-purple').click(function () {
+            var formData=new FormData($('#from')[0]);
+            var url="{:url('/user/upload')}";
+            $.ajax({
+                url: url ,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data.code==0){
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },2000)
+
+                    }else{
+                        layer.alert(data.msg, {
+                            skin: 'layui-layer-lan',closeBtn: 0
+                        });
+                    }
+                },
+            });
+        });
+    })
+</script>

@@ -1,0 +1,35 @@
+<div class="input-group" style="width: 30%;margin: 3% 3%">
+    <h3>修改密码</h3>
+    <p>新密码</p>
+    <input type="password" class="form-control" name="password" placeholder="请输入新密码">
+    <p>确认新密码</p>
+    <input type="password" class="form-control" name="password1" placeholder="确认新密码">
+    <input class="btn btn-primary submit" type="button" value="确认" style="margin-top: 10%;width: 30%;"/>
+</div>
+<script>
+    $('.submit').click(function () {
+        var password=$("input[name='password']").val();
+        var password1=$("input[name='password1']").val();
+        if (password=="" || password1 ==""){
+            layer.msg('新密码不可为空！');
+
+        } else{
+            if(password1!=password){
+                layer.msg('两次密码不一致！');
+            }else{
+                $.post("{:url('/admin/update')}",{password:password},function (data) {
+                    if (data.code==0){
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            window.location.href="{:url('/login')}";
+                        },2000)
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                })
+            }
+
+        }
+    });
+
+</script>
